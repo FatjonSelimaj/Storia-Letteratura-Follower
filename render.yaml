@@ -1,11 +1,11 @@
 services:
   - type: web
-    name: my-node-app  # Puoi personalizzare il nome
-    env: node
-    buildCommand: 'storia e letteratura'
-    startCommand: 'npm start'  # Usa il comando che esegue la tua app
-    plan: free
-    autoDeploy: true
-    envVars:
+    name: Storia-E-Letteratura  # Puoi personalizzare il nome del servizio
+    env: node  # Ambiente di esecuzione Node.js
+    buildCommand: 'npm install'  # Comando per installare le dipendenze
+    startCommand: 'npm start'  # Comando per avviare l'app (verifica che sia corretto)
+    plan: free  # Piano gratuito su Render
+    autoDeploy: true  # Abilita il deploy automatico per ogni push
+    envVars:  # Variabili d'ambiente
       - key: NODE_ENV
         value: production
