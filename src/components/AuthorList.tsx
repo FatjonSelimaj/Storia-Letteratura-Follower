@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { FaSearch, FaInfoCircle } from 'react-icons/fa';  // Importa le icone
+import { FaSearch, FaArrowRight, FaDownload } from 'react-icons/fa';  // Icone
 import { getAuthors } from '../services/authorService';
 import { useNavigate } from 'react-router-dom';
 import { Author } from '../interfaces/authorInterface';
+import jsPDF from 'jspdf'; // Importa jsPDF per il download in PDF
 
 const AuthorList: React.FC = () => {
     const [authors, setAuthors] = useState<Author[]>([]);
-    const [filteredAuthors, setFilteredAuthors] = useState<Author[]>([]); // Stato per gli autori filtrati
+    const [filteredAuthors, setFilteredAuthors] = useState<Author[]>([]); // Stato per autori filtrati
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState(''); // Stato per la query di ricerca
@@ -17,7 +18,7 @@ const AuthorList: React.FC = () => {
             try {
                 const data = await getAuthors();
                 setAuthors(data);
-                setFilteredAuthors(data); // Imposta gli autori filtrati uguali a quelli originali inizialmente
+                setFilteredAuthors(data); // Imposta autori filtrati uguali a quelli originali inizialmente
             } catch (err) {
                 setError('Failed to fetch authors');
             } finally {
@@ -44,6 +45,13 @@ const AuthorList: React.FC = () => {
         navigate(`/author-details/${id}`);  // Naviga alla pagina di dettagli dell'autore
     };
 
+    const downloadPdf = (author: Author) => {
+        const doc = new jsPDF();
+        doc.text(`Name: ${author.name}`, 10, 10);
+        doc.text(`Biography: ${author.biography || 'No biography available'}`, 10, 20);
+        doc.save(`${author.name}.pdf`);
+    };
+
     return (
         <div className="container mx-auto p-6">
             {loading && <p>Loading...</p>}
@@ -52,14 +60,13 @@ const AuthorList: React.FC = () => {
             <h1 className="text-3xl font-bold mb-4 text-blue-600">Authors</h1>
 
             {/* Barra di ricerca */}
-            <div className="relative mb-6">
-                <FaSearch className="absolute left-3 top-3 text-gray-400" />
+            <div className="container mx-auto p-6">
                 <input
                     type="text"
                     value={searchQuery}
                     onChange={handleSearch}
                     placeholder="Search authors by name or biography..."
-                    className="w-full p-3 pl-10 border text-black border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+                    className="w-full p-3 pl-10 border border-gray-500 text-black rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
                 />
             </div>
 
@@ -70,16 +77,26 @@ const AuthorList: React.FC = () => {
                     filteredAuthors.map((author) => (
                         <div
                             key={author.id}
-                            className="bg-white shadow-lg rounded-lg p-6 transform transition duration-300 hover:scale-105"
+                            className="bg-gradient-to-r from-green-100 to-green-300 shadow-md rounded-lg p-4 transition-transform duration-300 hover:scale-105"
                         >
-                            <h2 className="text-2xl font-semibold mb-2 text-blue-700">{author.name}</h2>
-                            <p className="text-gray-600 mb-4">{author.biography}</p>
-                            <button
-                                className="flex items-center text-blue-500 font-medium hover:underline"
-                                onClick={() => handleViewDetails(author.id)}  // Naviga alla pagina di visualizzazione
-                            >
-                                <FaInfoCircle className="mr-2" /> View Details
-                            </button>
+                            <h2 className="text-xl text-green-800 font-bold">{author.name}</h2>
+                            <p className="text-gray-700 mb-4">
+                                {author.biography ? `${author.biography.slice(0, 100)}...` : 'No biography available'}
+                            </p>
+                            <div className="flex justify-between">
+                                <button
+                                    className="text-green-600 font-medium flex items-center hover:underline"
+                                    onClick={() => handleViewDetails(author.id)}
+                                >
+                                    View Details <FaArrowRight className="ml-2" /> {/* Icona per View Details */}
+                                </button>
+                                <button
+                                    className="text-green-600 font-medium flex items-center hover:underline"
+                                    onClick={() => downloadPdf(author)}
+                                >
+                                    <FaDownload className="ml-2" /> Download PDF
+                                </button>
+                            </div>
                         </div>
                     ))
                 )}

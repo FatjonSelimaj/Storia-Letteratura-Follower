@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { FaSun, FaMoon, FaBars, FaTimes } from 'react-icons/fa'; // Icone per il menu e la modalità
-import MenuItem from './MenuItem';  // Importa il componente MenuItem
 
 const Navbar: React.FC = () => {
     const [darkMode, setDarkMode] = useState<boolean>(false); // Stato per gestire la modalità
@@ -37,7 +37,7 @@ const Navbar: React.FC = () => {
     }, [darkMode]);
 
     return (
-        <nav className={`p-4 fixed w-full top-0 left-0 z-50 ${darkMode ? 'bg-gray-900' : 'bg-gray-800'}`}>
+        <nav className="bg-gray-800 p-4 relative"> {/* Navbar sempre scuro */}
             <div className="container mx-auto flex justify-between items-center">
                 {/* Icona menu hamburger per schermi mobili */}
                 <button
@@ -47,24 +47,15 @@ const Navbar: React.FC = () => {
                     {menuOpen ? <FaTimes /> : <FaBars />}
                 </button>
 
-                {/* Menu di navigazione con effetto transizione */}
+                {/* Menu di navigazione */}
                 <div
-                    className={`fixed top-0 left-0 h-1/2 w-full bg-gray-800 md:bg-transparent z-40 flex flex-col justify-center items-center md:relative md:h-auto md:w-auto md:flex md:space-x-4 transition-transform duration-300 ease-in-out ${
-                        menuOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 md:opacity-100 md:transform-none'
-                    }`}
+                    className={`flex-col md:flex-row md:flex md:space-x-4 absolute md:relative bg-gray-800 w-full md:w-auto left-0 top-16 md:top-auto transition-transform duration-300 ease-in-out ${menuOpen ? 'flex' : 'hidden'}`}
                 >
-                    <button
-                        onClick={toggleMenu}
-                        className="absolute top-4 right-4 text-white text-2xl focus:outline-none md:hidden"
-                    >
-                        <FaTimes />
-                    </button>
-
-                    <MenuItem to="/" label="Home" darkMode={darkMode} />
-                    <MenuItem to="/articles" label="Articles" darkMode={darkMode} />
-                    <MenuItem to="/authors" label="Authors" darkMode={darkMode} />
-                    <MenuItem to="/history-sections" label="History Sections" darkMode={darkMode} />
-                    <MenuItem to="/works" label="Works" darkMode={darkMode} />
+                    <Link to="/" className="text-white py-2 px-4 block md:inline-block">Home</Link>
+                    <Link to="/articles" className="text-white py-2 px-4 block md:inline-block">Articles</Link>
+                    <Link to="/authors" className="text-white py-2 px-4 block md:inline-block">Authors</Link>
+                    <Link to="/history-sections" className="text-white py-2 px-4 block md:inline-block">History Sections</Link>
+                    <Link to="/works" className="text-white py-2 px-4 block md:inline-block">Works</Link>
                 </div>
 
                 {/* Icona per alternare tra modalità dark e light */}

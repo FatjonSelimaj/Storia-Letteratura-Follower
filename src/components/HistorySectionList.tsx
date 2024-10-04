@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { FaSearch, FaEye, FaTrashAlt, FaEdit } from 'react-icons/fa';  // Importa le icone
-import { getHistorySections, deleteHistorySection } from '../services/historyService';
+import { FaSearch, FaEye, FaDownload } from 'react-icons/fa';  // Importa le icone
+import { getHistorySections } from '../services/historyService';
 import { HistorySection } from '../interfaces/historyInterface';
 import { useNavigate } from 'react-router-dom';
+import jsPDF from 'jspdf'; // Importa la libreria jsPDF
 
 const HistorySectionList: React.FC = () => {
     const [historySections, setHistorySections] = useState<HistorySection[]>([]);
@@ -48,14 +49,13 @@ const HistorySectionList: React.FC = () => {
             <h1 className="text-3xl font-bold mb-4 text-blue-600">History Sections</h1>
 
             {/* Barra di ricerca */}
-            <div className="relative mb-6">
-                <FaSearch className="absolute left-3 top-3 text-gray-400" />
+            <div className="container mx-auto p-6">
                 <input
                     type="text"
                     value={searchQuery}
                     onChange={handleSearch}
                     placeholder="Search history sections by title, description, or historical period..."
-                    className="w-full p-3 pl-10 border border-gray-300 rounded-lg text-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+                    className="mb-6 p-2 border border-gray-500 text-black rounded w-full"
                 />
             </div>
 
@@ -91,10 +91,19 @@ const HistorySectionCard: React.FC<HistorySectionCardProps> = ({ section, onView
         setShowMore((prev) => !prev);
     };
 
+    // Funzione per scaricare la sezione storica come file PDF
+    const downloadPdf = () => {
+        const doc = new jsPDF();
+        doc.text(`Title: ${section.title}`, 10, 10);
+        doc.text(`Description: ${section.description}`, 10, 20);
+        doc.text(`Historical Period: ${section.historicalPeriod}`, 10, 30);
+        doc.save(`${section.title}.pdf`);
+    };
+
     return (
-        <div className="bg-white shadow-lg rounded-lg p-6 transform transition duration-300 hover:scale-105">
-            <h2 className="text-2xl font-semibold mb-2 text-blue-700">{section.title}</h2>
-            <p className="text-gray-600">
+        <div className="bg-gradient-to-r from-blue-100 to-blue-300 shadow-lg rounded-lg p-6 transform transition duration-300 hover:scale-105">
+            <h2 className="text-2xl font-semibold mb-2 text-blue-900">{section.title}</h2>
+            <p className="text-gray-700">
                 {showMore || !isLongDescription 
                     ? section.description 
                     : `${section.description.slice(0, maxDescriptionLength)}...`}
@@ -104,13 +113,19 @@ const HistorySectionCard: React.FC<HistorySectionCardProps> = ({ section, onView
                     {showMore ? 'Show Less' : 'Show More'}
                 </button>
             )}
-            <p className="text-gray-500 mt-2">Historical Period: {section.historicalPeriod}</p>
+            <p className="text-gray-600 mt-2">Historical Period: {section.historicalPeriod}</p>
             <div className="mt-4 flex justify-between">
                 <button 
                     className="flex items-center bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition"
                     onClick={onView}
                 >
                     <FaEye className="mr-2" /> View Details
+                </button>
+                <button 
+                    className="flex items-center bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition"
+                    onClick={downloadPdf}
+                >
+                    <FaDownload className="mr-2" /> Download PDF
                 </button>
             </div>
         </div>
