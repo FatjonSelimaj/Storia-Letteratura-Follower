@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { FaArrowLeft } from 'react-icons/fa';  // Icona per tornare indietro
+import { useParams, useNavigate } from 'react-router-dom';
+import { FaArrowLeft, FaSpinner, FaExclamationTriangle } from 'react-icons/fa';  // Icone per caricamento e errore
 import { getHistorySectionById } from '../../services/historyService';  // Funzione per ottenere una sezione storica tramite ID
 import { HistorySection } from '../../interfaces/historyInterface';
-import { useNavigate } from 'react-router-dom';
 
 const HistorySectionDetails: React.FC = () => {
     const { id } = useParams<{ id: string }>();  // Estrai l'ID dalla route
@@ -30,11 +29,27 @@ const HistorySectionDetails: React.FC = () => {
     }, [id]);
 
     if (loading) {
-        return <p>Loading...</p>;
+        return (
+            <div className="flex justify-center items-center h-64">
+                <FaSpinner className="animate-spin text-blue-500 text-4xl" />
+                <p className="ml-2 text-blue-500 text-xl">Loading...</p>
+            </div>
+        );
     }
 
     if (error) {
-        return <p className="text-red-500">{error}</p>;
+        return (
+            <div className="flex justify-center items-center h-64 text-red-500">
+                <FaExclamationTriangle className="text-4xl" />
+                <p className="ml-2 text-xl">{error}</p>
+                <button 
+                    className="ml-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600" 
+                    onClick={() => window.location.reload()}
+                >
+                    Retry
+                </button>
+            </div>
+        );
     }
 
     return (
@@ -48,11 +63,11 @@ const HistorySectionDetails: React.FC = () => {
                         <FaArrowLeft className="mr-2" /> Back
                     </button>
                     <h1 className="text-3xl font-bold mb-4 text-blue-700">{historySection.title}</h1>
-                    <p className="text-gray-500">Historical Period: {historySection.historicalPeriod}</p>
-                    <p className="text-gray-700 mb-6">{historySection.description}</p>
+                    <p className="text-gray-500 mb-2">Historical Period: {historySection.historicalPeriod}</p>
+                    <p className="text-gray-700">{historySection.description}</p>
                 </div>
             ) : (
-                <p>History section not found</p>
+                <p className="text-gray-500 text-center">History section not found</p>
             )}
         </div>
     );

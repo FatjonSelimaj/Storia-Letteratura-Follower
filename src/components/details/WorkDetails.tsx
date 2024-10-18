@@ -63,7 +63,13 @@ const WorkDetails: React.FC = () => {
                     </div>
                     <hr className="my-4" />
                     <p className="text-lg text-gray-700 mb-6">Genre: {work.genre}</p>
-                    <p className="text-lg text-gray-700 mb-6">Author: {work.author.name}</p>
+
+                    {/* Aggiunto controllo per verificare se l'autore esiste */}
+                    {work.author ? (
+                        <p className="text-lg text-gray-700 mb-6">Author: {work.author.name}</p>
+                    ) : (
+                        <p className="text-lg text-gray-500 mb-6">Author details not available</p>
+                    )}
                 </div>
             ) : (
                 <p className="text-gray-500 text-center">Work not found</p>

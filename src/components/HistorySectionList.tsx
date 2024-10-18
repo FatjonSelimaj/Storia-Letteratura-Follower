@@ -49,13 +49,13 @@ const HistorySectionList: React.FC = () => {
             <h1 className="text-3xl font-bold mb-4 text-blue-600">History Sections</h1>
 
             {/* Barra di ricerca */}
-            <div className="container mx-auto p-6">
+            <div className="container mx-auto p-12">
                 <input
                     type="text"
                     value={searchQuery}
                     onChange={handleSearch}
                     placeholder="Search history sections by title, description, or historical period..."
-                    className="mb-6 p-2 border border-gray-500 text-black rounded w-full"
+                    className="w-full p-3 pl-10 border border-gray-500 text-black rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
                 />
             </div>
 

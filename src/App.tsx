@@ -10,6 +10,8 @@ import AuthorDetails from './components/details/AuthorDetails';
 import ArticleDetails from './components/details/ArticleDetails'; 
 import HistorySectionDetails from './components/details/HistorySectionDetails';
 import WorkDetails from './components/details/WorkDetails';
+import LiteratureList from './components/LiteratureList';
+import LiteratureDetails from './components/details/LiteratureDetails';
 
 const App: React.FC = () => {
     return (
@@ -24,6 +26,8 @@ const App: React.FC = () => {
                     <Route path="/works" element={<WorkList />} />
                     <Route path="/author-details/:id" element={<AuthorDetails />} />  
                     <Route path="/article-details/:id" element={<ArticleDetails />} />
+                    <Route path="/literature/:id" element={<LiteratureDetails />} />
+                    <Route path="/literatures" element={<LiteratureList />} />
                     <Route path="/history-sections/:id" element={<HistorySectionDetails />} />
                     <Route path="/work-details/:id" element={<WorkDetails />} />
                 </Routes>
