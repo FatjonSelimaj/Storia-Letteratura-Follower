@@ -50,7 +50,7 @@ const LiteratureDetails: React.FC = () => {
             {literature ? (
                 <div className="bg-white shadow-lg rounded-lg p-6">
                     <h1 className="text-3xl font-bold mb-4 text-blue-700">Author: {literature.author?.name}</h1>
-                    <h2 className="text-2xl font-semibold mb-2">Work: {literature.work?.title}</h2>
+                    <h2 className="text-2xl text-black font-semibold mb-2">Work: {literature.work?.title}</h2>
                     <p className="text-gray-600 mb-4">Genre: {literature.work?.genre}</p>
                 </div>
             ) : (
